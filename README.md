@@ -1,12 +1,51 @@
-# React + Vite
+# Steam Magic Hat - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React.js frontend for **backend-smh**, built with Vite and styled with Bulma.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- View Steam user list
+- Browse Steam games list
+- Display shared Steam games
+- Random game selector
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Install dependencies:
+```bash
+npm install
+```
+   
+Build Bulma CSS (run in a separate terminal):
+
+```bash
+npm run start
+Run the development server:
+```
+```bash
+npm run dev
+```
+
+## Scripts
+```dev```  Start development server
+
+```build```  Create production build
+
+```preview```  Preview production build
+
+```build-bulma```  Build Bulma CSS
+
+```start```  Watch and rebuild Bulma CSS
+
+```lint```  Run ESLint
+
+## Dependencies
+React 19
+
+Vite
+
+Bulma CSS
+
+React Router
+
+Font Awesome
