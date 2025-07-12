@@ -4,8 +4,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './shared/not_found.jsx';
 import UsersHomeContent from './home/users_home_content.jsx';
 import GamesHomeContent from './games/games_home_content.jsx';
-import '../scss/smh.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import "bulma/css/bulma.min.css";
 
 const router = createBrowserRouter([
   {
