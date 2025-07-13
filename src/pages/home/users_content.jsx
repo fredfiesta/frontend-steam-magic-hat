@@ -6,7 +6,7 @@ const UsersContent = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const API_URL = process.env.BACKEND_USERS_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_USERS_URL;
 
     // Fetch existing users
     useEffect(() => {
