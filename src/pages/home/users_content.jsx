@@ -10,7 +10,7 @@ const UsersContent = () => {
 
     // Fetch existing users
     useEffect(() => {
-        console.log("API URL:", import.meta.env.VITE_BACKEND_USERS_URL);
+        // console.log("API URL:", import.meta.env.VITE_BACKEND_USERS_URL);
         setLoading(true);
         fetch(API_URL)
             .then(response => response.json())
