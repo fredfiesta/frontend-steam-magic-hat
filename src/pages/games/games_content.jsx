@@ -11,7 +11,7 @@ const GamesContent = () => {
     const [random, setRandom] = useState(false);
     const [gameSelected, setGameSelected] = useState(null);
 
-    const API_URL = 'http://127.0.0.1:8000/steam_games/';
+    const API_URL = process.env.BACKEND_GAMES_URL;
 
     const selectRandomGame = () => {
         const list = filter === 'all' ? games : filteredGames;

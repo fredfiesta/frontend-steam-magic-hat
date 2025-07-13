@@ -6,7 +6,7 @@ const UsersContent = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const API_URL = 'http://127.0.0.1:8000/steam_users/';
+    const API_URL = process.env.BACKEND_USERS_URL;
 
     // Fetch existing users
     useEffect(() => {
@@ -121,7 +121,6 @@ const UsersContent = () => {
                                         className="delete is-large"
                                         onClick={() => handleDeleteUser(user.steam_id)}
                                     >
-                                        x
                                     </button>
                             </article>
                         </li>
