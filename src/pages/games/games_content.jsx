@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React,{ useState, useEffect } from 'react';
 
 const GamesContent = () => {
     const [games, setGames] = useState([]);
@@ -8,10 +8,12 @@ const GamesContent = () => {
     const [isDeleteMode, setIsDeleteMode] = useState(false);
     const [filter, setFilter] = useState('all');
     const [modalRandom, setModalRandom] = useState(false);
-    const [random, setRandom] = useState(false);
     const [gameSelected, setGameSelected] = useState(null);
+    const [selectCounter, setSelectCounter] = useState(0);
+    const [counterSelected, setCounterSelected] = useState(null);
 
-    const API_URL = process.env.BACKEND_GAMES_URL;
+    const API_URL_GAMES = import.meta.env.VITE_BACKEND_GAMES_URL;
+    const API_URL_USERS = import.meta.env.VITE_BACKEND_USERS_URL;
 
     const selectRandomGame = () => {
         const list = filter === 'all' ? games : filteredGames;
@@ -56,14 +58,48 @@ const GamesContent = () => {
             });
     }
 
+    const loadSelectCounter = () => {
+        var selectList = [];
+        for (let i = selectCounter; i > 1; i--) {
+            selectList.push(<option key={""+i}>{i}</option>);
+        }
+        return selectList;
+    }
+
+    useEffect(()=>{
+        if (filter === 'shared') {
+            fetch(API_URL_GAMES + filter + '?min_shared_count=' + counterSelected)
+                .then(response => response.json())
+                .then(data => {
+                    setFilteredGames(data.results)
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching shared games:', error);
+                    setError(error);
+                    setLoading(false);
+                });
+        }
+    },[counterSelected])
+
     useEffect(() => {
         // Fetch games data from API
         setLoading(true);
+        fetch(API_URL_USERS)
+            .then(response => response.json())
+            .then(data => {
+                setSelectCounter(data.length);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching shared games:', error);
+                setError(error);
+                setLoading(false);
+            });
         if (filter === 'shared' && filteredGames.length === 0) {
-            fetch(API_URL + filter)
+            fetch(API_URL_GAMES + filter + '?min_shared_count=' + selectCounter)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.results)
                     setFilteredGames(data.results)
                     setLoading(false);
                 })
@@ -74,10 +110,9 @@ const GamesContent = () => {
                 });
         }
         else if (filter === 'all' && games.length === 0) {
-            fetch(API_URL)
+            fetch(API_URL_GAMES)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('All games:', data);
                     setGames(data);
                     setLoading(false);
                 })
@@ -88,16 +123,12 @@ const GamesContent = () => {
                 });
         }
         else { setLoading(false); }
+        
     }, [filter]);
 
     useEffect(() => {
         modalRandom && selectRandomGame()
     }, [modalRandom])
-    useEffect(() => {
-        selectRandomGame()
-    }, [random])
-
-
 
     return (
         <div className="container">
@@ -105,21 +136,21 @@ const GamesContent = () => {
                 <div className="modal-background" onClick={() => setModalRandom(!modalRandom)}></div>
                 <div className="modal-content">
 
-                    <div class="card">
-                        <div class="card-content">
+                    <div className="card">
+                        <div className="card-content">
                             {gameSelected != null && (
-                                <div class="media">
-                                    <div class="media-left">
-                                        <figure class="image">
+                                <div className="media">
+                                    <div className="media-left">
+                                        <figure className="image">
                                             <img
                                                 src={gameSelected.app_img_url}
                                                 alt="Placeholder image"
                                             />
                                         </figure>
                                     </div>
-                                    <div class="media-content">
-                                        <p class="title is-4">{gameSelected.name}</p>
-                                        <p class="subtitle is-6">{gameSelected.app_id}</p>
+                                    <div className="media-content">
+                                        <p className="title is-4">{gameSelected.name}</p>
+                                        <p className="subtitle is-6">{gameSelected.app_id}</p>
                                     </div>
                                 </div>
                             )}
@@ -133,17 +164,22 @@ const GamesContent = () => {
                 <h1 className="title">Games List</h1>
                 <div className="columns is-vcentered is-mobile">
                     <div className="column is-narrow">
-                        <div className="select is-small">
+                        <div className="select is-small mr-2">
                             <select value={filter} onChange={(e) => setFilter(e.target.value)}>
                                 <option value="all">All games</option>
                                 <option value="shared">Games in common</option>
                             </select>
                         </div>
+                        {filter === "shared" && (<div className="select is-small is-warning">
+                            <select name="selectCounter" onChange={(e) => setCounterSelected(e.target.value)}>
+                                {loadSelectCounter()}
+                            </select>
+                        </div>)}
                     </div>
 
                     <div className="column is-narrow">
                         <button
-                            className={`button is-small ${isDeleteMode ? 'is-danger' : 'is-info'}`}
+                            className={`button is-small ${isDeleteMode ? 'is-danger' : 'is-ghost'}`}
                             onClick={() => setIsDeleteMode(!isDeleteMode)}
                         >
                             {isDeleteMode ? 'Untoggle Delete' : 'Toggle Delete'} Mode
@@ -245,7 +281,7 @@ const GamesContent = () => {
                                             </div>
                                             <div className="tags are-small mt-2">
                                                 {game.shared_by.map(user => (
-                                                    <span key={user.steam_id} className="tag is-light">
+                                                    <span key={user.user_id} className="tag is-light">
                                                         {user.username}
                                                     </span>
                                                 ))}

@@ -6,10 +6,11 @@ const UsersContent = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const API_URL = process.env.BACKEND_USERS_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_USERS_URL;
 
     // Fetch existing users
     useEffect(() => {
+        // console.log("API URL:", import.meta.env.VITE_BACKEND_USERS_URL);
         setLoading(true);
         fetch(API_URL)
             .then(response => response.json())
@@ -105,7 +106,7 @@ const UsersContent = () => {
             {/* Users list */}
             <div className="card-content">
                 <ul>
-                    {users.map(user => (
+                    {users.length > 0 ? users.map(user => (
                         <li key={user.steam_id} className="box">
                             <article className="media">
                                 <div className="media-content">
@@ -116,15 +117,21 @@ const UsersContent = () => {
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <button
-                                        className="delete is-large"
-                                        onClick={() => handleDeleteUser(user.steam_id)}
-                                    >
-                                    </button>
+                                    className="delete is-large"
+                                    onClick={() => handleDeleteUser(user.steam_id)}
+                                >
+                                </button>
                             </article>
                         </li>
-                    ))}
+                    )) :
+                        (
+                            <div className="notification is-warning">
+                                No user found.
+                            </div>
+                        )
+                    }
                 </ul>
             </div>
         </div>
