@@ -106,7 +106,7 @@ const UsersContent = () => {
             {/* Users list */}
             <div className="card-content">
                 <ul>
-                    {users.map(user => (
+                    {users.length > 0 ? users.map(user => (
                         <li key={user.steam_id} className="box">
                             <article className="media">
                                 <div className="media-content">
@@ -117,15 +117,21 @@ const UsersContent = () => {
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <button
-                                        className="delete is-large"
-                                        onClick={() => handleDeleteUser(user.steam_id)}
-                                    >
-                                    </button>
+                                    className="delete is-large"
+                                    onClick={() => handleDeleteUser(user.steam_id)}
+                                >
+                                </button>
                             </article>
                         </li>
-                    ))}
+                    )) :
+                        (
+                            <div className="notification is-warning">
+                                No user found.
+                            </div>
+                        )
+                    }
                 </ul>
             </div>
         </div>
